@@ -6,8 +6,9 @@ const schedular = require('node-schedule');
 function realTimeWatcher(realTimeJob) {
 
     console.log(`Real time job wacher started for ${realTimeJob.job_name}`);
+
     let src_path = path.normalize(realTimeJob.source_path);
-    let dest_path = path.normalize(realTimeJob.dest_path);
+    let dest_path = path.normalize(util.getDestPath(realTimeJob));
 
     // start watcher 
     let watcher = chokidar.watch(src_path, { persistent: true });
@@ -32,15 +33,25 @@ function realTimeWatcher(realTimeJob) {
 
 
 
-function scheduledWather(scheduledJob) {
+function scheduledWatcher(scheduledJob) {
 
-    console.log('I am in scheduled job');
     let src_path = path.normalize(scheduledJob.source_path);
-    let dest_path = path.normalize(scheduledJob.dest_path);
+    let dest_path = path.normalize(util.getDestPath(scheduledJob));
 
+    for(let scheduleTime of scheduledJob.scheduler){
+        
+        startSchedular(scheduledJob, scheduleTime, src_path, dest_path);
+    }
+}
+
+
+function startSchedular(scheduledJob, scheduleTime, src_path, dest_path){
+
+    console.log(`schedule job ** ${scheduledJob.job_name} started `);
+    
     let watcher;
 
-    schedular.scheduleJob(scheduledJob.scheduler.from, function () {
+    schedular.scheduleJob(scheduleTime.from, function () {
 
         watcher = chokidar.watch(src_path, { persistent: true });
 
@@ -57,17 +68,16 @@ function scheduledWather(scheduledJob) {
         })
     });
 
-    schedular.scheduleJob(scheduledJob.scheduler.to, () => {
+    schedular.scheduleJob(scheduleTime.to, () => {
         if (watcher) {
             watcher.close();
-            console.log(`${scheduledJob.job_name} Watcher closed`);
+            console.log(`schedule job ** ${scheduledJob.job_name} closed `);
         }
     })
-
 }
 
 
 // export what you need. Put all properties in export object
 
 exports.realTimeWatcher = realTimeWatcher;
-exports.scheduledWather = scheduledWather;
+exports.scheduledWather = scheduledWatcher;

@@ -5,27 +5,37 @@ const jobs = [
         job_name: 'job1',
         source_path: './in_out_folder/source/job1',
         dest_path: './in_out_folder/destination/job1',
+        arch_path:'./in_out_folder/archive/job1',
         regex_condition: /\d.txt/,
         operation: 'copy',
         type: 'scheduled',
-        scheduler: {
-            from: '5 * 16 * * *',  // sec minute hour day month week 
-            to: '45 * 16 * * *'     // * means
-        },
+        scheduler:[{
+            from: '00 25 11 * * *',  //sec min hour day month week
+            to: '00 30 11 * * *'
+        },{
+            from: '00 35 11 * * *',  
+            to: '00 40 11 * * *'
+        }
+        ] ,
         enabled: true
     },
     {
         job_name: 'job2',
         source_path: './in_out_folder/source/job2',
         dest_path: './in_out_folder/destination/job2',
+        arch_path:'',
         regex_condition: /\d.txt/,
         operation: 'move',
         type: 'realtime',
-        scheduler: {
-            from: '00 06 15 * * *',  // HH:mm  -  24 hour format. Considers local systems time
-            to: '00 55 15 * * *'
-        },
-        enabled: false
+        scheduler:[{
+            from: '00 25 11 * * *',  
+            to: '00 30 11 * * *'
+        },{
+            from: '00 35 11 * * *',  
+            to: '00 40 11 * * *'
+        }
+        ] ,
+        enabled: true
     },
     {
         job_name: 'job3',
@@ -34,23 +44,29 @@ const jobs = [
         regex_condition: /\d.txt/,
         operation: 'move',
         type: 'realtime',
-        scheduler: {
-            from: '00 53 14 * * *',  // HH:mm  -  24 hour format. Considers local systems time
+        scheduler:[{
+            from: '00 53 14 * * *',  
             to: '00 55 14 * * *'
-        },
-        enabled: false
+        },{
+            from: '00 53 14 * * *',  
+            to: '00 55 14 * * *'
+        }
+        ] ,
+        enabled: true
     }, {
         job_name: 'job4',
         source_path: './in_out_folder/source/job4',
         dest_path: './in_out_folder/destination/job4',
+        arch_path:'./in_out_folder/archive/job4',
         regex_condition: /\d.txt/,
         operation: 'move',
         type: 'scheduled',
-        scheduler: {
-            from: '00 13 15 * * *',  // HH:mm  -  24 hour format. Considers local systems time
-            to: '00 19 15 * * *'
-        },
-        enabled: false
+        scheduler:[{
+            from: '00 30 11 * * *',  
+            to: '00 35 11 * * *'
+        }
+        ] ,
+        enabled: true
     },
     {
         job_name: 'job5',
@@ -59,10 +75,14 @@ const jobs = [
         regex_condition: /\d.txt/,
         operation: 'move',
         type: 'realtime',
-        scheduler: {
-            from: '00 53 14 * * *',  // HH:mm  -  24 hour format. Considers local systems time
+        scheduler:[{
+            from: '00 53 14 * * *',  
             to: '00 55 14 * * *'
-        },
+        },{
+            from: '00 53 14 * * *',  
+            to: '00 55 14 * * *'
+        }
+        ] ,
         enabled: false
     }
 ];

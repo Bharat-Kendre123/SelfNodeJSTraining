@@ -26,8 +26,14 @@ async function customMovefile(src_move_path, dest_paste_path) {
 }
 
 
+function findDestinationPath( job ){
+    return job.arch_path ? job.arch_path : job.dest_path;
+    }
+
+
 
 // export what you need. Put all properties in export object
 
 exports.copy = customCopy;
 exports.move = customMovefile;
+exports.getDestPath = findDestinationPath;
