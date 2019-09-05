@@ -1,5 +1,6 @@
 // We have defined all JOBs configuration in this file
 
+const loggingLevel = 'debug';
 const jobs = [
     {
         job_name: 'job1',
@@ -90,4 +91,5 @@ const jobs = [
 
 // exporting configured jobs
 
-module.exports = jobs;
+module.exports.jobs = jobs;
+module.exports.loggingLevel = loggingLevel;

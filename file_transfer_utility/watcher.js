@@ -2,21 +2,24 @@ const path = require('path');
 const chokidar = require('chokidar');
 const util = require('./utility');
 const schedular = require('node-schedule');
+const logger = require('./logger');
 
 function realTimeWatcher(realTimeJob) {
 
-    console.log(`Real time job wacher started for ${realTimeJob.job_name}`);
-
+    logger.debug('Realtime watcher for job ** %s ** has started', realTimeJob.job_name);
     let src_path = path.normalize(realTimeJob.source_path);
     let dest_path = path.normalize(util.getDestPath(realTimeJob));
+
+    logger.info('normlized source path for job %s is %s', realTimeJob.job_name, src_path);
+    logger.info('normlized desination path for job %s is %s', realTimeJob.job_name, dest_path);
 
     // start watcher 
     let watcher = chokidar.watch(src_path, { persistent: true });
 
     watcher.on('add', function (filePath) {
 
+        logger.debug('Add events is raised for job %s. Filepath - %s', realTimeJob.job_name, filePath);
         let filename = path.basename(filePath);
-
         if (filename.match(realTimeJob.regex_condition)) {
 
             let temp_dest_path = path.resolve(dest_path, filename);
@@ -24,7 +27,7 @@ function realTimeWatcher(realTimeJob) {
             realTimeJob.operation == 'copy' ? util.copy(temp_src_path, temp_dest_path) : util.move(temp_src_path, temp_dest_path);
 
         } else {
-            console.log(`File ${filename} is not matching with regex - ${realTimeJob.regex_condition}`);
+            logger.warn('File %s is not matching with regex - %s}', filename, realTimeJob.regex_condition);
         }
 
     })
@@ -38,6 +41,7 @@ function scheduledWatcher(scheduledJob) {
     let src_path = path.normalize(scheduledJob.source_path);
     let dest_path = path.normalize(util.getDestPath(scheduledJob));
 
+    logger.debug('Schedula watcher for job ** %s ** has started', scheduledJob.job_name);
     for(let scheduleTime of scheduledJob.scheduler){
         
         startSchedular(scheduledJob, scheduleTime, src_path, dest_path);
